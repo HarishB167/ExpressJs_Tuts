@@ -13,7 +13,30 @@ npm i --save-dev nodemon
 npm config set proxy http://username:password@host:port
 npm config set https-proxy http://username:password@host:port
 
+- Express server setup
+* In server.js
+const express = require('express')
+const app = express() // setup actual server
+app.listen(3000) // run server
+* Request types
+app.get, app.post, app.put, app.delete, app.patch
+* Setup routes
+app.get(path, func(req, res, [next]));
+> 99.9% of the time next arg is not used.
+> app.get("/", (req, res) => {
+  ..do something..
+  res.send('some text'); // sending text back to user.
+})
+* Return data to user
+res.send() - for testing purpose
+res.sendStatus(200/404/500) - sending back status code
+res.status(code).send(data) - sending data with status code
+res.status(code).json({message: "msg"}) - sending json data with status code
+res.json({..}) - sending json data with default status code (200)
 
+--------------------------------------
+
+Completed till - 6:09
 
 
 
