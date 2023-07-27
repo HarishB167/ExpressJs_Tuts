@@ -1,0 +1,20 @@
+
+- Basic Setup
+* Install node
+* In project dir : create package.json as
+npm init -y
+* Libraries : npm i express
+npm i --save-dev nodemon
+* In package.json in scripts add
+"devStart": "nodemon server.js"
+* Use : npm run devStart
+* Create server.js
+* Setting proxy if required
+npm config set proxy http://username:password@host:port
+npm config set https-proxy http://username:password@host:port
+
+
+
+
+
+
