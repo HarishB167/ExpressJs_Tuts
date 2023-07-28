@@ -27,12 +27,128 @@ app.get(path, func(req, res, [next]));
   ..do something..
   res.send('some text'); // sending text back to user.
 })
-* Return data to user
+
+- Sending data
 res.send() - for testing purpose
 res.sendStatus(200/404/500) - sending back status code
 res.status(code).send(data) - sending data with status code
 res.status(code).json({message: "msg"}) - sending json data with status code
 res.json({..}) - sending json data with default status code (200)
+res.download("pathOfFile") - send file to user.
+res.render("pathOfHtmlFile", [dataObjForView]) - send html markup for browser 
+optionally with data to view.
+res.redirect(path) - redirect to different url.
+
+- Rendering
+* Views are html files
+* Create views/ folder
+* View-engines : ejs, pug
+* Install : npm i ejs
+* Using engine : 
+Add after declaring app.
+app.set('view engine', 'ejs ')
+* In views/ rename index.html to index.ejs
+* Extension vscode install : ejs language support
+
+- View engine EJS
+* Using in template file
+<%= 2 + 2 %>
+> %= makes output to page
+> Will render 4
+* Accessing fields of passed object to template
+<%= fieldName %>
+* Accessing while object
+<%= locals.fieldName %>
+For preventing error of not defined.
+* Checking field to exist before rendering
+<%= locals.fieldName || "DefaltVal" %>
+
+
+- Routers
+* Create folder routes
+* Create routes/users.js
+const express = require('express')
+const router = express.Router() 
+* router has same methods as of app
+router.get("/", func) // for /users
+router.get("/new", func) // for /users/new
+* Export it
+module.exports = router
+* Import in server.js
+> Before app.listen
+const userRouter = require('./routes/users')
+app.use('/users', userRouter) // Linking route to a path
+
+- Advaned routing
+* Getting user by id
+router.get('/:id', (req,res) => {
+  const id = req.params.id
+  ...
+})
+* Accessing param : req.params.id
+* Put dynamic route at last after static routes, i.e.,
+/new before /:id
+* Using chaining for a route
+Removing duplicacy due to /:id in get, put, delete
+router.route('/:id').get((req,res) => {})
+  .put(func)).delete(func)
+
+- Middleware : router.param
+* Runs when given url has specific param in url.
+* Runs before actual router methods.
+* To pass control to router method, we need to call next().
+* We can add data to request (req.newField) to pass to router methods.
+And it can be accessed in router methods (req.newField)
+* Running when id is present in url
+router.param('id', (req, res, next, value) => {
+  req.user = usersFromDb[value]
+  next()
+})
+* value is value of the id param.
+
+- Middleware
+* In server.js
+* Function, args - req, res, next
+const logger = (req, res, next) => {
+  console.log(req.originalUrl)
+  next()
+}
+* Using middleware function
+app.use(logger)
+* To use this middleware for all functions
+use it after declaring app
+* It is runned only by routes, routers defined
+after using it. Routes and routers before using this
+does not run this middleware.
+* Using middleware for only one route
+app.get(path, ...midlewares..., (req, res) => {})
+> Multiple middlewares can be used
+> path is first argument
+> function is last argument
+> rest are middleware functions
+* In router file, if using at start, then
+middleware is runned by all functions in this router file.
+router.use(logger)
+
+- Built-in middlewares
+* Serve static files.
+Create public folder
+Add static files here
+In server.js, after declaring app
+app.use(express.static("public"))
+* Parsing Form/JSON Data
+> Accessing data of post request using middleware
+In server.js : app.use(express.urlencoded({ extended:true }))
+extended : true uses qs library, false uses querystring buil-in library.
+In users.js, in post method : const name = req.body.firstName
+> Accessing json data
+In server.js : app.use(express.json())
+Runs when content-type header is application/json in request.
+Assigns json converted body to req.body
+
+- Parse query params
+* Access as : req.query.fieldName
+
 
 --------------------------------------
 
