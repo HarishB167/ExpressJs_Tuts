@@ -149,10 +149,32 @@ Assigns json converted body to req.body
 - Parse query params
 * Access as : req.query.fieldName
 
+-----------------------------------------
+Section 2 -
+
+- Using mongoose to access MongoDB
+* Install mongoose : npm i mongoose
+* Install development dependencies
+npm i --save-dev dotenv nodemon
+* dotenv : to get environment variables form .env file
+* Define connection string in .env as
+DATABASE_URL=mongodb://127.0.0.1:27017/sampleData
+* Loading env in server.js as, write at top
+require('dotenv').config()
+* Using mongoose
+const mongoose = require('mongoose')
+mongoose.connect(process.env.DATABASE_URL)
+const db = mongoose.connection
+* On error in mongoose
+db.on('error', (error) => console.error(error))
+* On successfull connection
+db.once('open', () => console.log("Connected to Database"))
+
+
+
 
 --------------------------------------
 
-Completed till - 6:09
 
 
 
