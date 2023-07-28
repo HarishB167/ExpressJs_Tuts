@@ -170,8 +170,81 @@ db.on('error', (error) => console.error(error))
 * On successfull connection
 db.once('open', () => console.log("Connected to Database"))
 
+- Rest client
+* VSCode Extension
+* Similar to postman
+* Create a request
+GET <url>
+* Separate using ###
 
+- Creating a model
+* Create models folder in root
+* Create model as models/subscriber.js
+const mongoose = require("mongoose")
+* Create schema
+const subscriberSchema = new mongoose.Schema({
+  name:{
+    type: String, required: true
+  },
+  subscribedToChannel: {
+    type: String, required: true
+  },
+  subscribeDate: {
+    type: Date, required: true, default: Date.now
+  }
+})
+* Exporting model
+module.exports = mongoose.model(modelNameInDb, schema)
+module.exports = mongoose.model('Subscriber', subscriberSchema)
 
+- Using model
+* In subscriber.js route
+const Subscriber = require('../models/subscriber')
+* In get all subscribers using async as
+router.get('/', async (req, res) => {
+  try {
+    const subscribers = await Subscriber.find()
+    res.json(subscribers)
+  }
+  catch (err) {
+    res.status(500).json({message: err.message})
+  }
+})
+* Posting a subscriber
+router.post('/', async (req, res) => {
+  const subscriber = new Subscriber({
+    name: req.body.name,
+    subscribedToChannel: req.body.subscribedToChannel
+  })
+
+  try {
+    const newSubscriber = await subscriber.save();
+    res.status(201).json(newSubscriber)
+  }
+  catch (err) {
+    res.status(400).json({message: err.message})
+  } 
+})
+* Removing item
+const item = await Subscriber.findById(req.params.id)
+item.deleteOne()
+> In delete request : req.subscriber.deleteOne()
+* Updating
+const item = await Subscriber.findById(req.params.id)
+item.name = req.body.name
+item.save()
+> In patch request
+if(req.body.name != null)
+  res.subscriber.name = req.body.name
+if(req.body.subscribedToChannel != null)
+  res.subscriber.subscribedToChannel = req.body.subscribedToChannel
+try {
+  const updatedSubscriber = await res.subscriber.save()
+  res.json(updatedSubscriber)
+}
+catch (err) {
+  res.status(400).json({message: err.message})
+}
 
 --------------------------------------
 

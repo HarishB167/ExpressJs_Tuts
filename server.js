@@ -2,6 +2,8 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
+app.use(express.json());
+
 const mongoose = require("mongoose");
 
 mongoose.connect(process.env.DATABASE_URL);
@@ -16,6 +18,8 @@ app.get("/", (req, res) => {
 });
 
 const userRouter = require("./routes/users");
+const subscriberRouter = require("./routes/subscriber");
 app.use("/users", userRouter);
+app.use("/subscriber", subscriberRouter);
 
 app.listen(3000, () => console.log("Server started..."));
