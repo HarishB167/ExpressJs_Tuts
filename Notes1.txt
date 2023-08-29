@@ -163,7 +163,9 @@ DATABASE_URL=mongodb://127.0.0.1:27017/sampleData
 require('dotenv').config()
 * Using mongoose
 const mongoose = require('mongoose')
-mongoose.connect(process.env.DATABASE_URL)
+mongoose.connect(process.env.DATABASE_URL, [connectFunc], [errorFunc])
+connectFunc : Called when connects to DB.
+errorFunc(e) : Called when some error in connecting.
 const db = mongoose.connection
 * On error in mongoose
 db.on('error', (error) => console.error(error))
@@ -177,7 +179,7 @@ db.once('open', () => console.log("Connected to Database"))
 GET <url>
 * Separate using ###
 
-- Creating a model
+- Creating a model (schema)
 * Create models folder in root
 * Create model as models/subscriber.js
 const mongoose = require("mongoose")
@@ -193,11 +195,33 @@ const subscriberSchema = new mongoose.Schema({
     type: Date, required: true, default: Date.now
   }
 })
-* Exporting model
+* Types : String, Number, Date, ObjIdRef, NestedObj
+array - [] //of anything, [String] //of string
+* ObjIdRef type
+> const userSchema = mongoose.Schema({...})
+bestFriend : mongoose.SchemaTypes.ObjectId
+* NestedObj
+1st way => address : {street: String, city: String}
+2nd way => Define schema for address as
+const addressSchema = new mongoose.Schema({street: String, city: String})
+const userSchma = new mongoose.Schema({...address: addressSchema...})
+This 2nd way also creates id for addressSchema in db.
+* Creating and Exporting model
 module.exports = mongoose.model(modelNameInDb, schema)
 module.exports = mongoose.model('Subscriber', subscriberSchema)
 
 - Using model
+* All MongoDb functions are available on Model.
+* Using
+> Creating : 
+1. const user = new User({k-v pairs})
+await user.save()
+2. const user = await User.create({k-v pairs})
+> Updating : 
+const user = //get from db
+user.field = value; await user.save()
+* Error catching
+try{...} catch(e){console.log(e.message)}
 * In subscriber.js route
 const Subscriber = require('../models/subscriber')
 * In get all subscribers using async as
@@ -248,7 +272,8 @@ catch (err) {
 
 --------------------------------------
 
-
+Completed till 12:40
+Vid : https://www.youtube.com/watch?v=DZBGEVgL2eE
 
 
 
