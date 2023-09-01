@@ -279,9 +279,21 @@ User.where...populate("bestFriend")
 }
 * Virtual
 > Virtual property, similar to annotation in sql
-> userSchema.virtual("namedEmail").get(func).set(func)
-get
+> userSchema.virtual("namedEmail").get(funcGet).set(funcSet)
+funcGet : function() { return "this.name > this.email" }
 
+- Schema middleware
+* save, validating, removing, updateOne
+* userSchema.pre/post = before/after the main operation
+* userSchema.pre('save', function(next) {
+  this.updatedAt = Date.now()
+  next()
+})
+* userSchema.post('save', function(doc, next) {
+  ...  
+})
+
+doc is model object equivalent to this in pre middleware.
 - Using model
 * All MongoDb functions are available on Model.
 * Using
