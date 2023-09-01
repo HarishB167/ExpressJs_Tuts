@@ -246,6 +246,7 @@ module.exports = mongoose.model('Subscriber', subscriberSchema)
 User.where("name").equals("Kyle")
   .where("age").gt(12).lt(21)
   .limit(2)...
+Where can take args similar to find.
 > Limiting : .limit(2)
 > Selecting : .select("age")
 > Changing ObjId reference
@@ -255,6 +256,31 @@ user.save()
 > Populate (equivalent to join in sql)
 Adds fields of reference data to queried result
 User.where...populate("bestFriend")
+
+- Schema Methods/Virtuals
+* Arrow function cannot be used, as this keyword is used
+* Instance methods
+> userSchema.methods.mthdName = function() {
+  const userName = this.name;
+  print("User name is : " + userName);
+}
+* Static methods
+> Can only be called as static
+> Not available on query result
+> userSchema.statics.findByName = function(name) {
+  return this.where({name: new RegExp(name, 'i')})
+}
+* Query methods
+> Methods only available on query
+> Can only be called on query result (of find, etc)
+> Chainable with query
+> userSchema.query.byName = function(name) {
+  returns this.where(...)
+}
+* Virtual
+> Virtual property, similar to annotation in sql
+> userSchema.virtual("namedEmail").get(func).set(func)
+get
 
 - Using model
 * All MongoDb functions are available on Model.
