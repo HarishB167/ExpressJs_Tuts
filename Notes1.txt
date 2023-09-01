@@ -200,6 +200,11 @@ array - [] //of anything, [String] //of string
 * ObjIdRef type
 > const userSchema = mongoose.Schema({...})
 bestFriend : mongoose.SchemaTypes.ObjectId
+Or
+bestFriend : {
+  type: mongoose.SchemaTypes.ObjectId,
+  ref : "User"
+}
 * NestedObj
 1st way => address : {street: String, city: String}
 2nd way => Define schema for address as
@@ -217,6 +222,8 @@ and doesn't throw error.
 min/max : for number type
 minLength/maxLength : for string type
 validate : custom validation object
+ref : for ObjId ref type, to describe what type of
+model do this object id references
 * Custom validation object 
 validate : {
   validator: v => true/false,
@@ -226,6 +233,28 @@ validate : {
 * Creating and Exporting model
 module.exports = mongoose.model(modelNameInDb, schema)
 module.exports = mongoose.model('Subscriber', subscriberSchema)
+
+- Querying
+* Single data : User.findById(someId)
+* Similar to mongodb
+> List of data : User.find({key: value})
+> Get one : User.findOne({key: value})
+> Exists : User.exists({key: value})
+> Delete one : User.deleteOne({key: value})
+* Where
+> Chaining can be done
+User.where("name").equals("Kyle")
+  .where("age").gt(12).lt(21)
+  .limit(2)...
+> Limiting : .limit(2)
+> Selecting : .select("age")
+> Changing ObjId reference
+ref is required in Schema
+Using : user.bestFriend = someId
+user.save()
+> Populate (equivalent to join in sql)
+Adds fields of reference data to queried result
+User.where...populate("bestFriend")
 
 - Using model
 * All MongoDb functions are available on Model.
