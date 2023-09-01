@@ -206,6 +206,23 @@ bestFriend : mongoose.SchemaTypes.ObjectId
 const addressSchema = new mongoose.Schema({street: String, city: String})
 const userSchma = new mongoose.Schema({...address: addressSchema...})
 This 2nd way also creates id for addressSchema in db.
+* Flags in schema
+type : type of field
+required : true/false
+lowercase : true/false (Data is converted and saved in lowercase)
+uppercase : true/false (Data is converted and saved in uppercase)
+default : default value of function, e.g. -> for date () => Date.now()
+immutable : true/false, cannot be changed after first creation and ignores changes 
+and doesn't throw error.
+min/max : for number type
+minLength/maxLength : for string type
+validate : custom validation object
+* Custom validation object 
+validate : {
+  validator: v => true/false,
+  message : props => "msg : " + props.value
+}
+> Only works when using create and save methods of mongoose
 * Creating and Exporting model
 module.exports = mongoose.model(modelNameInDb, schema)
 module.exports = mongoose.model('Subscriber', subscriberSchema)
