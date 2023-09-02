@@ -150,7 +150,7 @@ Assigns json converted body to req.body
 * Access as : req.query.fieldName
 
 -----------------------------------------
-Section 2 -
+Section 2 - Mongoose
 
 - Using mongoose to access MongoDB
 * Install mongoose : npm i mongoose
@@ -355,9 +355,6 @@ catch (err) {
 }
 
 --------------------------------------
-
-Completed till 12:40
-Vid : https://www.youtube.com/watch?v=DZBGEVgL2eE
 
 
 

@@ -1,0 +1,57 @@
+Section 3 - JWT Authentication
+
+- Overview
+* Simple JWT Authentication
+Create tokens
+Send tokens
+Authenticate Tokens on server
+* Using Refresh Token
+Automatically refresh jwt tokens - to increase security,
+revoke priviliges from users (logout).
+
+- Setup
+* Libraries :
+npm i jsonwebtoken experss dotenv
+dev : nodemon
+* Secret tokens storage
+Development : .env file
+Productoin : env variables.
+* Create server.js file and create run
+command in package.json
+
+- Creating json webtoken
+* Import : const jwt = require("jsonwebtoken");
+* Create 2 keys in env file
+ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET
+* In login route
+> Authenticate user
+> store user data in object
+const data = {name: "some name", ...}
+> Create token
+const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET);
+> Send token in response
+res.json({ accessToken });
+
+- Authenticating tokens
+* Create middleware as
+function authenticateToken(req, res, next) {..}
+* Taking token from header
+> Header will have data : Bearer <token>
+> const authHeader = req.headers['authorization']
+> const token = authHeader && authHeader.split(' ')[1]
+* If no token provided
+if(token == null) return res.statusCode(401)
+* Verfiying token
+jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, func)
+> func(err, data) {
+    if (err) return res.statusCode(403) // Forbidden
+    req.user = data
+    next()
+}
+* In getting posts :
+> Add authorization middleware
+> Use req.user to filter
+res.json(posts.filter(p => p.username == req.user.name))
+
+- Refresh Tokens
+* 
