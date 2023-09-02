@@ -1,4 +1,66 @@
-Section 3 - JWT Authentication
+Section 3 - User Authentication
+
+- Install bcrypt
+npm i bcrypt
+
+- Getting users list
+> For testing purpose
+> const users = []
+> app.get('/users', (req, res) => {
+    res.json(users)
+})
+
+- Encrypting password
+* Import bcrypt
+const bcrypt = require('bcrypt')
+* 2 steps
+> Create salt
+> Use salt and password to create hashed password
+* Salt works : salt is added to beginning of password
+* Every password has different salt.
+* Similar password also have different hashes.
+* Salt for every password is stored in hashed password.
+* Bcrypt is async library, so func in routers should be async
+* Creating salt
+const salt = await bcrypt.genSalt([rounds])
+rounds is optional : 10 takes few seconds, 20 takes few days
+* Creating hashedPassword
+const hashedPassword = await bcrypt.hash(password, salt)
+* Creating hashedPassword with default salt
+const hashedPassword = await bcrypt.hash(password, 10)
+* Comparing hash and possible password
+await bcrypt.compare(password, hashedPassword)
+
+- Creating user
+> app.post('/users', async (req, res) => {
+    try {
+        const salt = await bcrypt.genSalt()
+        const hashedPassword = await bcrypt.hash(req.body.password, salt)
+        const user = {name : req.body.name, password: hashedPassword}
+        users.push(user)
+        res.sendStatus(201)
+    }
+    catch {
+        res.sendStatus(500)
+    }
+})
+
+- Login user
+> app.post('/users/login', async (req, res) => {
+    const user = users.find(user => user.name === req.body.name)
+    if (user === null) res.status(400).send("Can not find user")
+    try {
+        if (await bcrypt.compare(req.body.password, user.password))
+            res.send("Success")
+        else res.send("Not allowed")
+    } catch {
+        res.sendStatus(500)
+    }
+})
+
+
+------------------------------------------
+Section 4 - JWT Authentication
 
 - Overview
 * Simple JWT Authentication

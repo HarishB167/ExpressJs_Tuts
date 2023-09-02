@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "devStart": "nodemon server.js",
     "devStart2": "nodemon server2.js",
-    "devStartAuth": "nodemon authServer.js"
+    "devStartAuth": "nodemon authServer.js",
+    "devStart3": "nodemon server3.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   },
   "homepage": "https://github.com/HarishB167/ExpressJs_Tuts#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
