@@ -149,6 +149,18 @@ Assigns json converted body to req.body
 - Parse query params
 * Access as : req.query.fieldName
 
+- Enabling cors
+* Install : npm install cors
+* Import in server.js
+const cors = require("cors");
+* Loading cors origins from environment variable
+let cors_origins = process.env.CORS_ORIGINS;
+cors_origins = cors_origins.split(";");
+const origins = { origin: cors_origins };
+console.log("Allowed origins (CORS_ORIGINS) are : ", origins);
+* After declaring app.
+app.use(cors(origins));
+
 -----------------------------------------
 Section 2 - Mongoose
 
